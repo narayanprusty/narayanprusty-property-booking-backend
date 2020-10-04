@@ -67,11 +67,16 @@ describe('/api', () => {
       .expect('Content-Type', /json/)
       .expect(200)
 
-    expect(response.body[0].title).toBe(hotel.title)
-    expect(response.body[0].vicinity).toBe(hotel.vicinity)
-    expect(response.body[0].position[0]).toBe(hotel.position[0])
-    expect(response.body[0].position[1]).toBe(hotel.position[1])
-    expect(response.body[0].distance).toBe(hotel.distance)
+    expect(response.body[0]).toEqual({
+      title: hotel.title,
+      vicinity: hotel.vicinity,
+      position: [
+        hotel.position[0],
+        hotel.position[1]
+      ],
+      distance: hotel.distance,
+      id: hotel.id
+    })
     done()
   })
 
