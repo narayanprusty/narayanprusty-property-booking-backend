@@ -50,8 +50,6 @@ export const swaggerLoader: MicroframeworkLoader = (
       }
     ]
 
-    console.log(JSON.stringify(swaggerFile))
-
     expressApp.use(
       env.swagger.route,
       env.swagger.username
