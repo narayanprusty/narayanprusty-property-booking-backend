@@ -1,4 +1,3 @@
-import { defaultMetadataStorage as classTransformerMetadataStorage } from 'class-transformer/storage'
 import { getFromContainer, MetadataStorage } from 'class-validator'
 import { validationMetadatasToSchemas } from 'class-validator-jsonschema'
 import basicAuth from 'express-basic-auth'
@@ -20,10 +19,7 @@ export const swaggerLoader: MicroframeworkLoader = (
 
     const { validationMetadatas } = getFromContainer(MetadataStorage) as any
 
-    const schemas = validationMetadatasToSchemas(validationMetadatas, {
-      classTransformerMetadataStorage,
-      refPointerPrefix: '#/components/schemas/'
-    })
+    const schemas = validationMetadatasToSchemas(validationMetadatas)
 
     const swaggerFile = routingControllersToSpec(
       getMetadataArgsStorage(),
@@ -31,8 +27,7 @@ export const swaggerLoader: MicroframeworkLoader = (
       {
         components: {
           schemas,
-          securitySchemes: {
-          }
+          securitySchemes: {}
         }
       }
     )
@@ -54,11 +49,11 @@ export const swaggerLoader: MicroframeworkLoader = (
       env.swagger.route,
       env.swagger.username
         ? basicAuth({
-          users: {
-            [`${env.swagger.username}`]: env.swagger.password
-          },
-          challenge: true
-        })
+            users: {
+              [`${env.swagger.username}`]: env.swagger.password
+            },
+            challenge: true
+          })
         : (req, res, next) => next(),
       swaggerUi.serve,
       swaggerUi.setup(swaggerFile)
